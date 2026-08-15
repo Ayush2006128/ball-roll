@@ -6,14 +6,13 @@ interface StartScreenProps {
   gameState: GameState;
   score: number;
   highScore: number;
-  onStart: () => void;
 }
 
-export default function StartScreen({ gameState, score, highScore, onStart }: StartScreenProps) {
+export default function StartScreen({ gameState, score, highScore }: StartScreenProps) {
   if (gameState === 'playing') return null;
 
   return (
-    <div className="overlay-container" onClick={onStart}>
+    <div className="overlay-container">
       <div className="overlay-content">
         {gameState === 'idle' ? (
           <>

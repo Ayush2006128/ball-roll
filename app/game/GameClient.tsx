@@ -19,14 +19,17 @@ export default function GameClient() {
 
   const { inputState, consumeSwipe } = useGameInput();
   const rafRef = useRef<number>(0);
+  const inputRef = useRef(inputState);
+  inputRef.current = inputState;
 
   const gameLoop = useCallback((time: number) => {
-    update(time, inputState.isPressed, inputState.swipeDirection);
-    if (inputState.swipeDirection) {
+    const input = inputRef.current;
+    update(time, input.isPressed, input.swipeDirection);
+    if (input.swipeDirection) {
       consumeSwipe();
     }
     rafRef.current = requestAnimationFrame(gameLoop);
-  }, [update, inputState, consumeSwipe]);
+  }, [update, consumeSwipe]);
 
   useEffect(() => {
     if (gameData.state === 'playing') {
@@ -35,11 +38,12 @@ export default function GameClient() {
     }
   }, [gameData.state, gameLoop]);
 
-  const handleStart = useCallback(() => {
-    if (gameData.state !== 'playing') {
+  // Start game on tap/click/key press when not playing
+  useEffect(() => {
+    if (inputState.isPressed && gameData.state !== 'playing') {
       startGame();
     }
-  }, [gameData.state, startGame]);
+  }, [inputState.isPressed, gameData.state, startGame]);
 
   return (
     <div className="game-container">
@@ -55,7 +59,6 @@ export default function GameClient() {
         gameState={gameData.state}
         score={gameData.score}
         highScore={gameData.highScore}
-        onStart={handleStart}
       />
     </div>
   );
