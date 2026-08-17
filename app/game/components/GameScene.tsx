@@ -1,6 +1,7 @@
 'use client';
 
 import { Canvas } from '@react-three/fiber';
+import * as THREE from 'three';
 import Ball from './Ball';
 import Track from './Track';
 import SpaceEnvironment from './SpaceEnvironment';
@@ -24,7 +25,7 @@ export default function GameScene({
 }: GameSceneProps) {
   return (
     <Canvas
-      shadows
+      shadows={{ type: THREE.PCFShadowMap }}
       camera={{ fov: 65, near: 0.1, far: 1000, position: [0, 10, 15] }}
       style={{
         width: '100%',

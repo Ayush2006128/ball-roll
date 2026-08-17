@@ -75,8 +75,7 @@ export default function SpaceEnvironment() {
         intensity={1.2}
         color="#ffffff"
         castShadow
-        shadow-mapSize-width={1024}
-        shadow-mapSize-height={1024}
+        shadow-mapSize={[1024, 1024]}
       />
 
       {/* Colored accent lights */}
