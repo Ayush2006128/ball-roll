@@ -45,7 +45,7 @@ function TrackPiece({ segment }: { segment: TrackSegment }) {
         position={[
           centerX + Math.cos(segment.rotation) * (TRACK_WIDTH / 2 + 0.1),
           segment.elevation + 0.1,
-          centerZ + Math.sin(segment.rotation) * (TRACK_WIDTH / 2 + 0.1),
+          centerZ - Math.sin(segment.rotation) * (TRACK_WIDTH / 2 + 0.1),
         ]}
         rotation={[0, segment.rotation, 0]}
       >
@@ -66,7 +66,7 @@ function TrackPiece({ segment }: { segment: TrackSegment }) {
         position={[
           centerX - Math.cos(segment.rotation) * (TRACK_WIDTH / 2 + 0.1),
           segment.elevation + 0.1,
-          centerZ - Math.sin(segment.rotation) * (TRACK_WIDTH / 2 + 0.1),
+          centerZ + Math.sin(segment.rotation) * (TRACK_WIDTH / 2 + 0.1),
         ]}
         rotation={[0, segment.rotation, 0]}
       >

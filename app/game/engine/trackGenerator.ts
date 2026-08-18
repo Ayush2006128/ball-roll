@@ -69,7 +69,7 @@ export function generateSegment(): TrackSegment {
     hillType,
   };
   
-  // Update position for next segment
+  // Update position for next segment (advance in current segment's direction)
   const dx = Math.sin(currentRotation) * TRACK_SEGMENT_LENGTH;
   const dz = -Math.cos(currentRotation) * TRACK_SEGMENT_LENGTH;
   
@@ -79,7 +79,7 @@ export function generateSegment(): TrackSegment {
     currentPosition[2] + dz,
   ];
   
-  // Apply turn for next segment
+  // Apply turn rotation for next segment (after advancing position)
   if (isTurn && turnDirection) {
     currentRotation += turnDirection === 'left' ? -Math.PI / 2 : Math.PI / 2;
   }
