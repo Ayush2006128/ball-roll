@@ -9,27 +9,93 @@ interface TrackProps {
   segments: TrackSegment[];
 }
 
-function TrackPiece({ segment }: { segment: TrackSegment }) {
+function TrackPiece({
+  segment,
+  nextSegment,
+}: {
+  segment: TrackSegment;
+  nextSegment?: TrackSegment;
+}) {
   const color = RAINBOW_COLORS[segment.colorIndex];
-  
-  const geometry = useMemo(() => {
-    const geo = new THREE.BoxGeometry(TRACK_WIDTH, 0.3, TRACK_SEGMENT_LENGTH);
+  const endPosition: [number, number, number] = nextSegment
+    ? nextSegment.position
+    : ([
+        segment.position[0] + Math.sin(segment.rotation) * TRACK_SEGMENT_LENGTH,
+        segment.elevation,
+        segment.position[2] - Math.cos(segment.rotation) * TRACK_SEGMENT_LENGTH,
+      ] as [number, number, number]);
+  const endElevation = nextSegment ? nextSegment.elevation : segment.elevation;
+
+  const startRotation = segment.rotation;
+  const endRotation = nextSegment ? nextSegment.rotation : segment.rotation;
+
+  const sideOffset = TRACK_WIDTH / 2;
+  const railOffset = sideOffset + 0.1;
+
+  const startLeft = useMemo<[number, number, number]>(() => ([
+    segment.position[0] + Math.cos(startRotation) * sideOffset,
+    segment.elevation,
+    segment.position[2] - Math.sin(startRotation) * sideOffset,
+  ]), [segment.position, segment.elevation, startRotation, sideOffset]);
+
+  const startRight = useMemo<[number, number, number]>(() => ([
+    segment.position[0] - Math.cos(startRotation) * sideOffset,
+    segment.elevation,
+    segment.position[2] + Math.sin(startRotation) * sideOffset,
+  ]), [segment.position, segment.elevation, startRotation, sideOffset]);
+
+  const endLeft = useMemo<[number, number, number]>(() => ([
+    endPosition[0] + Math.cos(endRotation) * sideOffset,
+    endElevation,
+    endPosition[2] - Math.sin(endRotation) * sideOffset,
+  ]), [endPosition, endElevation, endRotation, sideOffset]);
+
+  const endRight = useMemo<[number, number, number]>(() => ([
+    endPosition[0] - Math.cos(endRotation) * sideOffset,
+    endElevation,
+    endPosition[2] + Math.sin(endRotation) * sideOffset,
+  ]), [endPosition, endElevation, endRotation, sideOffset]);
+
+  const trackGeometry = useMemo(() => {
+    const geo = new THREE.BufferGeometry();
+    const vertices = new Float32Array([
+      ...startLeft,
+      ...startRight,
+      ...endRight,
+      ...endLeft,
+    ]);
+    geo.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+    geo.setIndex([0, 1, 2, 0, 2, 3]);
+    geo.computeVertexNormals();
     return geo;
-  }, []);
-  
-  // Calculate the center position of this segment
-  // The segment.position is the start; we need to offset to center
-  const centerX = segment.position[0] + Math.sin(segment.rotation) * TRACK_SEGMENT_LENGTH / 2;
-  const centerZ = segment.position[2] - Math.cos(segment.rotation) * TRACK_SEGMENT_LENGTH / 2;
+  }, [startLeft, startRight, endRight, endLeft]);
+
+  const startRailLeft: [number, number, number] = [
+    segment.position[0] + Math.cos(startRotation) * railOffset,
+    segment.elevation + 0.1,
+    segment.position[2] - Math.sin(startRotation) * railOffset,
+  ];
+  const endRailLeft: [number, number, number] = [
+    endPosition[0] + Math.cos(endRotation) * railOffset,
+    endElevation + 0.1,
+    endPosition[2] - Math.sin(endRotation) * railOffset,
+  ];
+  const startRailRight: [number, number, number] = [
+    segment.position[0] - Math.cos(startRotation) * railOffset,
+    segment.elevation + 0.1,
+    segment.position[2] + Math.sin(startRotation) * railOffset,
+  ];
+  const endRailRight: [number, number, number] = [
+    endPosition[0] - Math.cos(endRotation) * railOffset,
+    endElevation + 0.1,
+    endPosition[2] + Math.sin(endRotation) * railOffset,
+  ];
   
   return (
     <group>
-      {/* Main track surface */}
       <mesh
-        position={[centerX, segment.elevation - 0.15, centerZ]}
-        rotation={[0, segment.rotation, 0]}
+        geometry={trackGeometry}
         receiveShadow
-        geometry={geometry}
       >
         <meshStandardMaterial
           color={color}
@@ -37,50 +103,12 @@ function TrackPiece({ segment }: { segment: TrackSegment }) {
           roughness={0.4}
           emissive={color}
           emissiveIntensity={0.15}
+          side={THREE.DoubleSide}
         />
       </mesh>
       
-      {/* Side rails - left */}
-      <mesh
-        position={[
-          centerX + Math.cos(segment.rotation) * (TRACK_WIDTH / 2 + 0.1),
-          segment.elevation + 0.1,
-          centerZ - Math.sin(segment.rotation) * (TRACK_WIDTH / 2 + 0.1),
-        ]}
-        rotation={[0, segment.rotation, 0]}
-      >
-        <boxGeometry args={[0.15, 0.5, TRACK_SEGMENT_LENGTH]} />
-        <meshStandardMaterial
-          color={color}
-          metalness={0.6}
-          roughness={0.2}
-          emissive={color}
-          emissiveIntensity={0.4}
-          transparent
-          opacity={0.7}
-        />
-      </mesh>
-      
-      {/* Side rails - right */}
-      <mesh
-        position={[
-          centerX - Math.cos(segment.rotation) * (TRACK_WIDTH / 2 + 0.1),
-          segment.elevation + 0.1,
-          centerZ + Math.sin(segment.rotation) * (TRACK_WIDTH / 2 + 0.1),
-        ]}
-        rotation={[0, segment.rotation, 0]}
-      >
-        <boxGeometry args={[0.15, 0.5, TRACK_SEGMENT_LENGTH]} />
-        <meshStandardMaterial
-          color={color}
-          metalness={0.6}
-          roughness={0.2}
-          emissive={color}
-          emissiveIntensity={0.4}
-          transparent
-          opacity={0.7}
-        />
-      </mesh>
+      <RailBeam start={startRailLeft} end={endRailLeft} color={color} />
+      <RailBeam start={startRailRight} end={endRailRight} color={color} />
       
       {/* Turn indicator */}
       {segment.isTurn && (
@@ -103,11 +131,55 @@ function TrackPiece({ segment }: { segment: TrackSegment }) {
   );
 }
 
+function RailBeam({
+  start,
+  end,
+  color,
+}: {
+  start: [number, number, number];
+  end: [number, number, number];
+  color: string;
+}) {
+  const { position, quaternion, length } = useMemo(() => {
+    const startVec = new THREE.Vector3(...start);
+    const endVec = new THREE.Vector3(...end);
+    const direction = endVec.clone().sub(startVec);
+    const segmentLength = direction.length();
+    const mid = startVec.clone().add(endVec).multiplyScalar(0.5);
+    const quat = new THREE.Quaternion().setFromUnitVectors(
+      new THREE.Vector3(0, 1, 0),
+      direction.normalize(),
+    );
+    return {
+      position: [mid.x, mid.y, mid.z] as [number, number, number],
+      quaternion: quat,
+      length: segmentLength,
+    };
+  }, [start, end]);
+
+  return (
+    <mesh position={position} quaternion={quaternion}>
+      <cylinderGeometry args={[0.075, 0.075, length, 10]} />
+      <meshStandardMaterial
+        color={color}
+        metalness={0.6}
+        roughness={0.2}
+        emissive={color}
+        emissiveIntensity={0.35}
+      />
+    </mesh>
+  );
+}
+
 export default function Track({ segments }: TrackProps) {
   return (
     <group>
-      {segments.map((segment) => (
-        <TrackPiece key={segment.id} segment={segment} />
+      {segments.map((segment, index) => (
+        <TrackPiece
+          key={segment.id}
+          segment={segment}
+          nextSegment={segments[index + 1]}
+        />
       ))}
     </group>
   );
