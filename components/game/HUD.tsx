@@ -1,5 +1,6 @@
 'use client';
 
+import { Star } from 'lucide-react';
 import { GameData } from '@/engine/types';
 
 interface HUDProps {
@@ -28,7 +29,7 @@ export default function HUD({ gameData }: HUDProps) {
         </div>
 
         <div className="hud-highscore">
-          <span className="hud-highscore-icon">★</span>
+          <Star className="hud-highscore-icon" size={14} fill="currentColor" />
           <span>{gameData.highScore.toLocaleString()}</span>
         </div>
       </div>

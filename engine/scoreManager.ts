@@ -4,7 +4,9 @@ export function getHighScore(): number {
   if (typeof window === 'undefined') return 0;
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
-    return stored ? parseInt(stored, 10) : 0;
+    if (!stored) return 0;
+    const parsed = parseInt(stored, 10);
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : 0;
   } catch {
     return 0;
   }

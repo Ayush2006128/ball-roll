@@ -1,5 +1,6 @@
 'use client';
 
+import { Hand, ArrowLeftRight, Star, Trophy } from 'lucide-react';
 import { GameState } from '@/engine/types';
 
 interface StartScreenProps {
@@ -26,17 +27,17 @@ export default function StartScreen({ gameState, score, highScore }: StartScreen
             </div>
             <div className="controls-info">
               <div className="control-item">
-                <span className="control-icon">👆</span>
+                <Hand className="control-icon" size={18} strokeWidth={2.2} />
                 <span>Hold to accelerate</span>
               </div>
               <div className="control-item">
-                <span className="control-icon">👈👉</span>
+                <ArrowLeftRight className="control-icon" size={18} strokeWidth={2.2} />
                 <span>Swipe to turn</span>
               </div>
             </div>
             {highScore > 0 && (
               <div className="best-score">
-                <span className="best-score-icon">★</span>
+                <Star className="best-score-icon" size={16} fill="currentColor" />
                 Best: {highScore.toLocaleString()}
               </div>
             )}
@@ -56,7 +57,10 @@ export default function StartScreen({ gameState, score, highScore }: StartScreen
               </div>
             </div>
             {score >= highScore && score > 0 && (
-              <div className="new-highscore-badge">🏆 NEW HIGH SCORE!</div>
+              <div className="new-highscore-badge">
+                <Trophy size={16} fill="currentColor" />
+                NEW HIGH SCORE!
+              </div>
             )}
             <div className="start-prompt">
               <p>TAP TO PLAY AGAIN</p>

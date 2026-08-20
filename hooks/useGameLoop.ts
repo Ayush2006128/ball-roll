@@ -99,7 +99,7 @@ export function useGameLoop() {
   
   const endGame = useCallback(() => {
     gameStateRef.current = 'gameover';
-    const finalScore = Math.floor(scoreRef.current);
+    const finalScore = Math.max(0, Math.floor(scoreRef.current));
     const isNew = setHighScore(finalScore);
     if (isNew) {
       highScoreRef.current = finalScore;
@@ -152,7 +152,7 @@ export function useGameLoop() {
   const update = useCallback((time: number, isPressed: boolean, swipeDir: 'left' | 'right' | null) => {
     if (gameStateRef.current !== 'playing') return;
     
-    const dt = Math.min((time - lastTimeRef.current) / 1000, 0.05); // cap dt
+    const dt = Math.max(0, Math.min((time - lastTimeRef.current) / 1000, 0.05)); // cap dt, prevent negative frame deltas
     lastTimeRef.current = time;
     
     const physics = physicsRef.current;
@@ -268,12 +268,14 @@ export function useGameLoop() {
     setBallPosition([...physics.position] as [number, number, number]);
     setBallRotation(physics.rotation);
     setSegments([...segs]);
+    const displayScore = Math.max(0, Math.floor(scoreRef.current));
+
     setGameData({
       state: 'playing',
-      score: Math.floor(scoreRef.current),
-      highScore: Math.max(highScoreRef.current, Math.floor(scoreRef.current)),
+      score: displayScore,
+      highScore: Math.max(highScoreRef.current, displayScore),
       speed: Math.round(physics.velocity),
-      distance: Math.floor(scoreRef.current / 2),
+      distance: Math.max(0, Math.floor(scoreRef.current / 2)),
     });
   }, [endGame, getTrackElevationAt, getTrackSlope]);
   
