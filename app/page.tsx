@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 
-const GameClient = dynamic(() => import('./game/GameClient'), {
+const GameClient = dynamic(() => import('@/components/game/GameClient'), {
   ssr: false,
   loading: () => (
     <div className="loading-screen">

@@ -1,10 +1,10 @@
 'use client';
 
 import { useRef, useCallback, useState, useEffect } from 'react';
-import { GameState, GameData, TrackSegment } from '../engine/types';
-import { generateInitialTrack, generateSegment, resetTrackGenerator } from '../engine/trackGenerator';
-import { getHighScore, setHighScore } from '../engine/scoreManager';
-import { playHighScoreSound, playGameOverSound, playTurnSound } from '../engine/audioManager';
+import { GameState, GameData, TrackSegment } from '@/engine/types';
+import { generateInitialTrack, generateSegment, resetTrackGenerator } from '@/engine/trackGenerator';
+import { getHighScore, setHighScore } from '@/engine/scoreManager';
+import { playHighScoreSound, playGameOverSound, playTurnSound } from '@/engine/audioManager';
 import {
   MAX_SPEED,
   ACCELERATION,
@@ -17,7 +17,7 @@ import {
   BALL_RADIUS,
   STOP_TIMEOUT,
   MIN_SPEED_THRESHOLD,
-} from '../engine/constants';
+} from '@/engine/constants';
 
 interface BallPhysics {
   position: [number, number, number];

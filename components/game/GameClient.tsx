@@ -1,11 +1,11 @@
 'use client';
 
 import { useCallback, useEffect, useRef } from 'react';
-import GameScene from './components/GameScene';
-import HUD from './components/HUD';
-import StartScreen from './components/StartScreen';
-import { useGameLoop } from './hooks/useGameLoop';
-import { useGameInput } from './hooks/useGameInput';
+import GameScene from './GameScene';
+import HUD from './HUD';
+import StartScreen from './StartScreen';
+import { useGameLoop } from '@/hooks/useGameLoop';
+import { useGameInput } from '@/hooks/useGameInput';
 
 export default function GameClient() {
   const {

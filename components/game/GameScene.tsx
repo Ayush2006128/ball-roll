@@ -6,7 +6,7 @@ import Ball from './Ball';
 import Track from './Track';
 import SpaceEnvironment from './SpaceEnvironment';
 import CameraController from './CameraController';
-import { TrackSegment, GameState } from '../engine/types';
+import { TrackSegment, GameState } from '@/engine/types';
 
 interface GameSceneProps {
   segments: TrackSegment[];

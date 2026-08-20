@@ -1,6 +1,6 @@
 'use client';
 
-import { GameData } from '../engine/types';
+import { GameData } from '@/engine/types';
 
 interface HUDProps {
   gameData: GameData;

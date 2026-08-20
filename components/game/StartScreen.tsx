@@ -1,6 +1,6 @@
 'use client';
 
-import { GameState } from '../engine/types';
+import { GameState } from '@/engine/types';
 
 interface StartScreenProps {
   gameState: GameState;

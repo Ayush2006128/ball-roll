@@ -3,7 +3,7 @@
 import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import { BALL_RADIUS } from '../engine/constants';
+import { BALL_RADIUS } from '@/engine/constants';
 
 interface BallProps {
   position: [number, number, number];

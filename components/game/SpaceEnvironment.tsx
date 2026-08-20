@@ -3,7 +3,7 @@
 import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import { STAR_COUNT } from '../engine/constants';
+import { STAR_COUNT } from '@/engine/constants';
 
 export default function SpaceEnvironment() {
   const starsRef = useRef<THREE.Points>(null);

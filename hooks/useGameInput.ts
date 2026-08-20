@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useCallback, useState } from 'react';
-import { InputState } from '../engine/types';
+import { InputState } from '@/engine/types';
 
 const SWIPE_THRESHOLD = 40;
 

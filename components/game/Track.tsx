@@ -2,8 +2,8 @@
 
 import { useMemo } from 'react';
 import * as THREE from 'three';
-import { TrackSegment } from '../engine/types';
-import { TRACK_WIDTH, TRACK_SEGMENT_LENGTH, RAINBOW_COLORS } from '../engine/constants';
+import { TrackSegment } from '@/engine/types';
+import { TRACK_WIDTH, TRACK_SEGMENT_LENGTH, RAINBOW_COLORS } from '@/engine/constants';
 
 interface TrackProps {
   segments: TrackSegment[];
