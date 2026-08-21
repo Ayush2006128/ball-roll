@@ -127,6 +127,7 @@ export default function GameClient() {
       {/* Settings gear — always visible */}
       <button
         className="settings-gear-btn"
+        data-ui
         onClick={(e) => {
           e.stopPropagation();
           setSettingsOpen(true);

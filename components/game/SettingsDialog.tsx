@@ -69,7 +69,7 @@ export default function SettingsDialog({
   const isSelected = settings.skinId === skin.id;
 
   return (
-    <div className="settings-backdrop" onClick={onClose}>
+    <div className="settings-backdrop" data-ui onClick={onClose}>
       <div
         className="settings-dialog"
         onClick={(e) => e.stopPropagation()}
