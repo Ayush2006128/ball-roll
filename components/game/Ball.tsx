@@ -1,7 +1,7 @@
 'use client';
 
-import { useRef } from 'react';
-import { useFrame, useLoader } from '@react-three/fiber';
+import { useRef, useMemo } from 'react';
+import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { BALL_RADIUS } from '@/engine/constants';
 
@@ -15,16 +15,12 @@ export default function Ball({ position, speed, texturePath }: BallProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const glowRef = useRef<THREE.PointLight>(null);
   
-  // Load texture if a path is provided
-  const texture = useLoader(
-    THREE.TextureLoader,
-    texturePath || '',
-    undefined,
-    // On error (e.g. empty string), just ignore
-    () => {},
-  );
+  // Load texture imperatively so we can handle null/undefined paths
+  const texture = useMemo(() => {
+    if (!texturePath) return null;
+    return new THREE.TextureLoader().load(texturePath);
+  }, [texturePath]);
   
-  const hasTexture = !!texturePath && texture instanceof THREE.Texture;
   
   useFrame((_, delta) => {
     if (meshRef.current) {
@@ -42,7 +38,7 @@ export default function Ball({ position, speed, texturePath }: BallProps) {
       {/* Main ball */}
       <mesh ref={meshRef} castShadow>
         <sphereGeometry args={[BALL_RADIUS, 32, 32]} />
-        {hasTexture ? (
+        {texture ? (
           <meshStandardMaterial
             map={texture}
             metalness={0.2}
