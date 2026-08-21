@@ -1,6 +1,15 @@
 let audioContext: AudioContext | null = null;
 let fxMuted = false;
 
+const MUSIC_TRACKS = [
+  '/assets/music/bg_music1.mp3',
+  '/assets/music/bg_music2.mp3',
+];
+let musicAudio: HTMLAudioElement | null = null;
+let musicTrackIndex = -1;
+let musicStarted = false;
+let musicMuted = false;
+
 function getAudioContext(): AudioContext {
   if (!audioContext) {
     audioContext = new AudioContext();
@@ -14,6 +23,51 @@ export function setFxMuted(muted: boolean) {
 
 export function isFxMuted(): boolean {
   return fxMuted;
+}
+
+function getMusicAudio(): HTMLAudioElement | null {
+  if (typeof window === 'undefined') return null;
+  if (!musicAudio) {
+    musicAudio = new Audio();
+    musicAudio.volume = 0.35;
+    musicAudio.preload = 'auto';
+    musicAudio.addEventListener('ended', () => {
+      if (!musicAudio || musicMuted) return;
+      musicTrackIndex = (musicTrackIndex + 1) % MUSIC_TRACKS.length;
+      musicAudio.src = MUSIC_TRACKS[musicTrackIndex];
+      void musicAudio.play().catch(() => {});
+    });
+  }
+  return musicAudio;
+}
+
+export function startMusic() {
+  const audio = getMusicAudio();
+  if (!audio || musicMuted) return;
+
+  if (!musicStarted) {
+    musicTrackIndex = Math.floor(Math.random() * MUSIC_TRACKS.length);
+    audio.src = MUSIC_TRACKS[musicTrackIndex];
+    musicStarted = true;
+  }
+
+  void audio.play().catch(() => {});
+}
+
+export function setMusicMuted(muted: boolean) {
+  musicMuted = muted;
+  const audio = musicAudio;
+  if (!audio) return;
+
+  if (muted) {
+    audio.pause();
+  } else {
+    startMusic();
+  }
+}
+
+export function isMusicMuted(): boolean {
+  return musicMuted;
 }
 
 export function playHighScoreSound() {

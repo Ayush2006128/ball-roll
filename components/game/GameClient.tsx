@@ -8,7 +8,7 @@ import StartScreen from './StartScreen';
 import SettingsDialog, { BALL_SKINS, GameSettings } from './SettingsDialog';
 import { useGameLoop } from '@/hooks/useGameLoop';
 import { useGameInput } from '@/hooks/useGameInput';
-import { setFxMuted } from '@/engine/audioManager';
+import { setFxMuted, setMusicMuted, startMusic } from '@/engine/audioManager';
 
 const SETTINGS_STORAGE_KEY = 'ball-roll-settings';
 
@@ -62,10 +62,23 @@ export default function GameClient() {
   // Sync FX mute with audio manager whenever settings change
   useEffect(() => {
     setFxMuted(settings.fxMuted);
+    setMusicMuted(settings.musicMuted);
     saveSettings(settings);
   }, [settings]);
 
+  useEffect(() => {
+    const handleFirstInteraction = () => startMusic();
+    document.addEventListener('pointerdown', handleFirstInteraction);
+    document.addEventListener('keydown', handleFirstInteraction);
+
+    return () => {
+      document.removeEventListener('pointerdown', handleFirstInteraction);
+      document.removeEventListener('keydown', handleFirstInteraction);
+    };
+  }, []);
+
   const handleSettingsChange = useCallback((next: GameSettings) => {
+    setMusicMuted(next.musicMuted);
     setSettings(next);
   }, []);
 
