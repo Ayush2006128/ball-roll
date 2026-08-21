@@ -89,13 +89,23 @@ export default function GameClient() {
     }
   }, [gameData.state, gameLoop]);
 
+  // Request fullscreen on first user interaction (browsers require a gesture)
+  const requestFullscreen = useCallback(() => {
+    const el = document.documentElement;
+    if (document.fullscreenElement) return;
+    el.requestFullscreen?.().catch(() => {
+      // Silently ignore — some browsers/contexts don't support it
+    });
+  }, []);
+
   // Start game on tap/click/key press when not playing
   // Ignore if the settings dialog is open so tapping inside it doesn't start a game
   useEffect(() => {
     if (inputState.isPressed && gameData.state !== 'playing' && !settingsOpen) {
+      requestFullscreen();
       startGame();
     }
-  }, [inputState.isPressed, gameData.state, startGame, settingsOpen]);
+  }, [inputState.isPressed, gameData.state, startGame, settingsOpen, requestFullscreen]);
 
   return (
     <div className="game-container">
