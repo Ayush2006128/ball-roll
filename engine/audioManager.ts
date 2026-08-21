@@ -1,4 +1,5 @@
 let audioContext: AudioContext | null = null;
+let fxMuted = false;
 
 function getAudioContext(): AudioContext {
   if (!audioContext) {
@@ -7,7 +8,16 @@ function getAudioContext(): AudioContext {
   return audioContext;
 }
 
+export function setFxMuted(muted: boolean) {
+  fxMuted = muted;
+}
+
+export function isFxMuted(): boolean {
+  return fxMuted;
+}
+
 export function playHighScoreSound() {
+  if (fxMuted) return;
   const ctx = getAudioContext();
   const now = ctx.currentTime;
   
@@ -35,6 +45,7 @@ export function playHighScoreSound() {
 }
 
 export function playGameOverSound() {
+  if (fxMuted) return;
   const ctx = getAudioContext();
   const now = ctx.currentTime;
   
@@ -57,6 +68,7 @@ export function playGameOverSound() {
 }
 
 export function playTurnSound() {
+  if (fxMuted) return;
   const ctx = getAudioContext();
   const now = ctx.currentTime;
   

@@ -14,6 +14,7 @@ interface GameSceneProps {
   ballRotation: number;
   speed: number;
   gameState: GameState;
+  texturePath?: string | null;
 }
 
 export default function GameScene({
@@ -22,6 +23,7 @@ export default function GameScene({
   ballRotation,
   speed,
   gameState,
+  texturePath,
 }: GameSceneProps) {
   return (
     <Canvas
@@ -41,7 +43,7 @@ export default function GameScene({
       <SpaceEnvironment />
       <Track segments={segments} />
       {gameState !== 'idle' && (
-        <Ball position={ballPosition} speed={speed} />
+        <Ball position={ballPosition} speed={speed} texturePath={texturePath} />
       )}
       <CameraController
         target={ballPosition}
