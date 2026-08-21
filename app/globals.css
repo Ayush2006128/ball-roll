@@ -46,6 +46,7 @@ html, body {
   position: relative;
   width: 100vw;
   height: 100vh;
+  height: 100dvh;
   overflow: hidden;
   background: var(--color-bg);
 }
@@ -161,7 +162,9 @@ html, body {
   justify-content: center;
   z-index: 20;
   cursor: pointer;
-  background: radial-gradient(ellipse at center, rgba(5, 5, 16, 0.6) 0%, rgba(5, 5, 16, 0.9) 100%);
+  background:
+    radial-gradient(ellipse at center, rgba(5, 5, 16, 0.4) 0%, rgba(5, 5, 16, 0.85) 100%),
+    url('/assets/textures/stars_txmap.jpg') center / cover no-repeat;
   animation: overlayFadeIn 0.5s ease-out;
 }
 
@@ -412,6 +415,307 @@ html, body {
 
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+/* ===== Settings Gear Button ===== */
+.settings-gear-btn {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  z-index: 25;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--color-glass-border);
+  background: var(--color-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: var(--color-text-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, box-shadow 0.2s;
+  pointer-events: auto;
+}
+
+.settings-gear-btn:hover {
+  color: var(--color-text);
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-glow);
+}
+
+/* ===== Settings Dialog ===== */
+.settings-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(5, 5, 16, 0.7);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: overlayFadeIn 0.25s ease-out;
+}
+
+.settings-dialog {
+  width: min(400px, 92vw);
+  max-height: 85vh;
+  overflow-y: auto;
+  background: linear-gradient(
+    160deg,
+    rgba(30, 30, 60, 0.95),
+    rgba(15, 15, 30, 0.98)
+  );
+  border: 1px solid var(--color-glass-border);
+  border-radius: var(--radius);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 0 8px 60px rgba(0, 0, 0, 0.6), var(--shadow-glow);
+  animation: dialogSlideIn 0.3s ease-out;
+}
+
+@keyframes dialogSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Header */
+.settings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.settings-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-text);
+}
+
+.settings-title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.settings-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--color-glass-border);
+  background: transparent;
+  color: var(--color-text-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.settings-close:hover {
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+/* Sections */
+.settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.settings-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  color: var(--color-text-dim);
+}
+
+/* ── Skin Carousel ── */
+.skin-carousel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.carousel-arrow {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--color-glass-border);
+  background: var(--color-glass);
+  color: var(--color-text-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.carousel-arrow:hover {
+  color: var(--color-text);
+  border-color: var(--color-primary);
+  background: rgba(108, 99, 255, 0.12);
+}
+
+.skin-preview-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.skin-preview {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 2px solid var(--color-glass-border);
+  background-size: cover;
+  background-position: center;
+  transition: box-shadow 0.3s, border-color 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.skin-preview-default-gradient {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 35%,
+    rgba(108, 99, 255, 0.5) 0%,
+    rgba(0, 229, 255, 0.15) 60%,
+    transparent 100%
+  );
+}
+
+.skin-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text);
+  letter-spacing: 0.5px;
+}
+
+.skin-counter {
+  font-size: 11px;
+  font-weight: 500;
+  font-family: var(--font-mono);
+  color: var(--color-text-dim);
+}
+
+/* Equip button */
+.skin-select-btn {
+  width: 100%;
+  padding: 10px 0;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--btn-accent, var(--color-primary));
+  background: transparent;
+  color: var(--btn-accent, var(--color-primary));
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.skin-select-btn:hover:not(:disabled) {
+  background: var(--btn-accent, var(--color-primary));
+  color: #fff;
+  box-shadow: 0 0 20px color-mix(in srgb, var(--btn-accent, var(--color-primary)) 40%, transparent);
+}
+
+.skin-select-btn.skin-selected {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--color-glass-border);
+  color: var(--color-success);
+  cursor: default;
+}
+
+/* ── Audio Toggles ── */
+.settings-toggles {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--color-glass);
+  border: 1px solid var(--color-glass-border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+}
+
+.toggle-label-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.toggle-icon {
+  color: var(--color-accent);
+  flex-shrink: 0;
+}
+
+.toggle-icon.muted {
+  color: var(--color-text-dim);
+}
+
+.toggle-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+/* Toggle switch */
+.toggle-switch {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  border-radius: 12px;
+  border: 1px solid var(--color-glass-border);
+  background: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  transition: background 0.25s, border-color 0.25s;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.toggle-switch.toggle-on {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.toggle-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.toggle-switch.toggle-on .toggle-knob {
+  transform: translateX(20px);
 }
 
 /* ===== Responsive ===== */

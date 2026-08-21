@@ -7,8 +7,9 @@ export default function manifest(): MetadataRoute.Manifest {
     description: 'An endless space runner game.',
     start_url: '/',
     display: 'standalone',
-    background_color: '#000000',
-    theme_color: '#000000',
+    orientation: 'portrait',
+    background_color: '#050510',
+    theme_color: '#050510',
     icons: [
       {
         src: '/web-app-manifest-192x192.png',

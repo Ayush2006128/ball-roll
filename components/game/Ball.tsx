@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { BALL_RADIUS } from '@/engine/constants';
@@ -8,11 +8,19 @@ import { BALL_RADIUS } from '@/engine/constants';
 interface BallProps {
   position: [number, number, number];
   speed: number;
+  texturePath?: string | null;
 }
 
-export default function Ball({ position, speed }: BallProps) {
+export default function Ball({ position, speed, texturePath }: BallProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const glowRef = useRef<THREE.PointLight>(null);
+  
+  // Load texture imperatively so we can handle null/undefined paths
+  const texture = useMemo(() => {
+    if (!texturePath) return null;
+    return new THREE.TextureLoader().load(texturePath);
+  }, [texturePath]);
+  
   
   useFrame((_, delta) => {
     if (meshRef.current) {
@@ -30,14 +38,23 @@ export default function Ball({ position, speed }: BallProps) {
       {/* Main ball */}
       <mesh ref={meshRef} castShadow>
         <sphereGeometry args={[BALL_RADIUS, 32, 32]} />
-        <meshStandardMaterial
-          color="#ffffff"
-          metalness={0.9}
-          roughness={0.1}
-          emissive="#4488ff"
-          emissiveIntensity={0.3}
-          envMapIntensity={1.5}
-        />
+        {texture ? (
+          <meshStandardMaterial
+            map={texture}
+            metalness={0.2}
+            roughness={0.6}
+            envMapIntensity={0.8}
+          />
+        ) : (
+          <meshStandardMaterial
+            color="#ffffff"
+            metalness={0.9}
+            roughness={0.1}
+            emissive="#4488ff"
+            emissiveIntensity={0.3}
+            envMapIntensity={1.5}
+          />
+        )}
       </mesh>
       
       {/* Inner glow */}
