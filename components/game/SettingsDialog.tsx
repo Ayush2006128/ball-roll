@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { Settings, X, ChevronLeft, ChevronRight, Volume2, VolumeOff, Music, Music2 } from 'lucide-react';
+import { Settings, X, ChevronLeft, ChevronRight, Volume2, VolumeOff, Headphones, HeadphoneOff } from 'lucide-react';
 
 export interface BallSkin {
   id: string;
@@ -161,8 +161,8 @@ export default function SettingsDialog({
             <div className="toggle-row">
               <div className="toggle-label-group">
                 {settings.musicMuted
-                  ? <Music2 size={16} className="toggle-icon muted" />
-                  : <Music size={16} className="toggle-icon" />}
+                  ? <HeadphoneOff size={16} className="toggle-icon muted" />
+                  : <Headphones size={16} className="toggle-icon" />}
                 <span className="toggle-label">Music</span>
               </div>
               <button
