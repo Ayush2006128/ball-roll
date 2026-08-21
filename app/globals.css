@@ -161,7 +161,9 @@ html, body {
   justify-content: center;
   z-index: 20;
   cursor: pointer;
-  background: radial-gradient(ellipse at center, rgba(5, 5, 16, 0.6) 0%, rgba(5, 5, 16, 0.9) 100%);
+  background:
+    radial-gradient(ellipse at center, rgba(5, 5, 16, 0.4) 0%, rgba(5, 5, 16, 0.85) 100%),
+    url('/assets/textures/stars_txmap.jpg') center / cover no-repeat;
   animation: overlayFadeIn 0.5s ease-out;
 }
 
