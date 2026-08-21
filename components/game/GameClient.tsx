@@ -141,6 +141,9 @@ export default function GameClient() {
       <button
         className="settings-gear-btn"
         data-ui
+        onPointerDown={(e) => e.stopPropagation()}
+        onTouchStart={(e) => e.stopPropagation()}
+        onTouchEnd={(e) => e.stopPropagation()}
         onClick={(e) => {
           e.stopPropagation();
           setSettingsOpen(true);

@@ -36,6 +36,7 @@ export default function GameScene({
         top: 0,
         left: 0,
         touchAction: 'none',
+        pointerEvents: 'none',
       }}
       gl={{ antialias: true, alpha: false }}
     >

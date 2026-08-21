@@ -19,7 +19,14 @@ export function useGameInput() {
   }, []);
   
   useEffect(() => {
+    // Check if the event target is inside a UI overlay (settings, dialog, etc.)
+    const isUIElement = (e: Event): boolean => {
+      const target = e.target as HTMLElement | null;
+      return !!target?.closest?.('[data-ui]');
+    };
+
     const handleTouchStart = (e: TouchEvent) => {
+      if (isUIElement(e)) return;
       e.preventDefault();
       const touch = e.touches[0];
       touchStartRef.current = { x: touch.clientX, y: touch.clientY, time: Date.now() };
@@ -28,6 +35,7 @@ export function useGameInput() {
     };
     
     const handleTouchMove = (e: TouchEvent) => {
+      if (isUIElement(e)) return;
       e.preventDefault();
       if (!touchStartRef.current || swipeProcessedRef.current) return;
       
@@ -45,6 +53,7 @@ export function useGameInput() {
     };
     
     const handleTouchEnd = (e: TouchEvent) => {
+      if (isUIElement(e)) return;
       e.preventDefault();
       touchStartRef.current = null;
       setInputState(prev => ({ ...prev, isPressed: false }));
@@ -52,6 +61,7 @@ export function useGameInput() {
     
     // Mouse fallback for desktop
     const handleMouseDown = (e: MouseEvent) => {
+      if (isUIElement(e)) return;
       touchStartRef.current = { x: e.clientX, y: e.clientY, time: Date.now() };
       swipeProcessedRef.current = false;
       setInputState(prev => ({ ...prev, isPressed: true }));
